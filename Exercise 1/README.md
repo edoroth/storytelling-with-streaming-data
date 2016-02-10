@@ -5,9 +5,7 @@ Storytelling with Streaming Data Assignment 1
 
  The submission url is at http://www.columbia.edu/~enr2116/wikipedia.html. To start the websocket which is necessary for information to appear on the website, the following command needs to be run inside of this directory:
 
- '''
- websocketd --port=8080 python wikipedia_stream.py
- '''
+ ` websocketd --port=8080 python wikipedia_stream.py `
 
  This site shows a live stream of articles that have recently been edited on Wikipedia.
 
