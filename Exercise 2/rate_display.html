@@ -1,0 +1,20 @@
+<h2> Exercise 2 </h2>
+
+<pre id="text"></pre>
+<script>
+  // Display message on screen
+  function log(msg) {
+    document.getElementById('text').textContent =  msg +  '\n' + document.getElementById('text').textContent ;
+  }
+  //Call websocket
+  var ws = new WebSocket('ws://localhost:8080/');
+  ws.onopen = function() {
+    console.log('CONNECTED');
+  };
+  ws.onclose = function() {
+    console.log('DISCONNECTED');
+  };
+  ws.onmessage = function(event) {
+    log(event.data);
+  };
+</script>

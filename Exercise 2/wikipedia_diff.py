@@ -18,12 +18,15 @@ while 1:
         last = d["t"]
         continue
     delta = d["t"] - last
-    print (json.dumps({"delta":delta, "t":d["t"]}))
+    #print (json.dumps({"delta":delta, "t":d["t"]}))
     #We calculate the rate by looking at 10 messages a time
     if (len(diffs) < 10):
     	diffs.append(delta)
     if (len(diffs) == 10):
-    	print ("rate is " + str(sum(diffs)/float(len(diffs))) + "seconds per message")
+    	rate = sum(diffs)/float(len(diffs))
+    	print ("rate is %.3f seconds per message" % rate )
+    	if (rate < 0.500):
+    		print ("Holy smokes we've got some activity!")
     	diffs = []
     sys.stdout.flush()
     last = d["t"]
