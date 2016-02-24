@@ -29,11 +29,15 @@ while 1:
     if (len(diffs) < 3):
     	diffs.append(delta)
     	edits.append(d)
+    	# Write to standard error when an edit is made to monitor all edits going on
+    	sys.stderr.write(d["name"])
     # We measure the rate over an average of 3 total differences. This gives us an average rate for our stream.
     # I chose three because this is a good indication of noticeable activity in editing a specific category
     if (len(diffs) == 3):
     	# Calculate rate by summing all differences over the last 3 differences seen
     	rate = sum(diffs)/float(len(diffs))
+    	# Write to standard error every three edits to keep track of rate
+    	sys.stderr.write("rate is" + str(rate))
     	if (rate < 120.00):
     		s = ""
     		i = 0

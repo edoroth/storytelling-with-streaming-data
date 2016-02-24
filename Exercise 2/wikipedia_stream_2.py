@@ -87,5 +87,5 @@ while True:
 
     # Wait before next request.
     # Waiting for 5 seconds before sending a request means that we have a margin of error of 5 seconds in marking the time difference
-    # between edits. However, as we deem a string of 5 messages coming every 2 minutes as significant, this margin is insignificant.
+    # between edits. However, as we deem a string of 3 messages coming every 2 minutes as significant, this margin is insignificant.
     time.sleep(5)
