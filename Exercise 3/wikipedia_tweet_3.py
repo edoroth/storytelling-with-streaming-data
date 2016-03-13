@@ -4,9 +4,9 @@
 #Storytelling with Streaming Data
 #Exercise 3 
 
-# Twitter bot that takes information about a spike in the rate of articles edited on Wikipedia about 2016 Presidential candidates.
-# An uptake in rate (3 edits in less than 2 minutes) will cause a tweet to be sent, containing the names of those articles.
-# Most of below code used in exercise 2, modified slightly for this exercise
+# Twitter bot that takes information about a spike in the rate of articles edited on Wikipedia by software bots.
+# Will send a tweet to the account @dropshot_lob every time it receives information -- should be used conjunctively
+# with wikipedia_diff_3.py for correct input information
 
 import tweepy
 import sys
@@ -22,4 +22,4 @@ api = tweepy.API(auth)
 line = sys.stdin.readline()
 
 # Send out tweet -- tweets are limited to 140 characters, so if the names of the articles happen to be long, they will be truncated.
-api.update_status("Distribution tweet! " + line[0:min(93,len(line))])
+api.update_status("Wikipedia bots are making some intense edits!")

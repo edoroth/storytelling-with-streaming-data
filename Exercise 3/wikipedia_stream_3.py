@@ -27,12 +27,6 @@ def checkstring(s):
 # identificication numbers for every unique edit which we use for this purpose.
 logged_edits = {}
 
-# List of major candidates still in play in the 2016 presential election
-# I chose to look at edits containing the full name of any of these candidates because these articles are most relevent
-# and contain official information about candidates  and their campaign. Choosing only last names, for instance,
-# adds a whole host of articles that may not directly pertain to these seven candidates.
-candidates = ["Donald Trump", "Hillary Clinton", "Bernie Sanders", "Ben Carson", "Ted Cruz", "Marco Rubio", "John Kasich"]
-
 # Run forever
 # Ensures that this continues to gather information for as long as the service is running
 while True:
@@ -42,8 +36,9 @@ while True:
     #   -Revision ID
     #   -Title of Article
     #   -Timestamp of Article's edit
+    #   -Flags containing information on whether article was edited by a bot, a minor edit, or a new page
     # All of this information is essential to verify that we are dealing with unique edits, and to extract information about the articles being edited
-    s = requests.get('https://en.wikipedia.org/w/api.php?action=query&list=recentchanges&format=json&rcprop=ids|title|timestamp&rclimit=100')
+    s = requests.get('https://en.wikipedia.org/w/api.php?action=query&list=recentchanges&format=json&rcprop=ids|title|timestamp|flags&rclimit=100')
 
     # Check status code to ensure good response
     # If any code other than 200 is received, the program may crash and I wanted a tool to understand the failure.
@@ -74,16 +69,18 @@ while True:
             # reflect edits meant for view by the wider public
             if  ":" not in change["title"] :
 
-                #stderr.write(change["title"]+'\n')
-
-                for candidate in candidates:
-                    # Check if any of the candidates' names appear in the article title.
-                    # I chose this metric because this set of articles encompass all official
-                    # Wikipedia content pertaining to any of the presidential candidate.
-                    if (candidate in checkstring(change["title"])):
-                        # Print the title of the article that was edited along with the current time
-                        # This allows every single edit to be logged individually when it comes in.
-                        print (json.dumps({"t": time.time(), "name": checkstring(change["title"])}))
+                # Print the title of the article that was edited along with the current time
+                # Prints four different categories for whether edits were made by a bot or not and whether they were
+                # 'minor' edits as determined by Wikipedia
+                # This allows every single edit to be logged individually when it comes in.
+                if 'bot' in change and 'minor' in change:
+                    print (json.dumps({"t": time.time(), "name": checkstring(change["title"]), "bot": "yes", "minor":"yes"}))
+                if 'bot' in change and 'minor' not in change:
+                    print (json.dumps({"t": time.time(), "name": checkstring(change["title"]), "bot": "yes", "minor":"no"}))
+                if 'bot' not in change and 'minor' in change:
+                    print (json.dumps({"t": time.time(), "name": checkstring(change["title"]), "bot": "no", "minor":"yes"}))
+                if 'bot' not in change and 'minor' not in change:
+                    print (json.dumps({"t": time.time(), "name": checkstring(change["title"]), "bot": "no", "minor":"no"}))
 
         #Empty the buffer
         stdout.flush()

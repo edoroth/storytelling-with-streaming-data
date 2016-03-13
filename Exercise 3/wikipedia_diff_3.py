@@ -4,6 +4,8 @@
 # Modified code from code provided in lecture on 2/10/16, 
 # as well as from submission from exercise 2
 
+# Monitors the rate of Wikipedia edits made by software bots by grouping into buckets of 10 edits at a time
+
 import json
 import sys
 
@@ -24,20 +26,20 @@ while 1:
         continue
     delta = d["t"] - last
     # We calculate the rate by averaging over 3 edits at a time
-    # As long as we haven't seen 3 edits, we stored the time differences and edits themselves
-    if (len(diffs) < 3):
+    # As long as we haven't seen 10 edits, we stored the time differences and edits themselves
+    if (len(diffs) < 10 and d["bot"] == "yes"):
     	diffs.append(delta)
     	edits.append(d)
     	# Write to standard error when an edit is made to monitor all edits going on
     	sys.stderr.write(d["name"])
     # We measure the rate over an average of 3 total differences. This gives us an average rate for our stream.
-    # I chose three because this is a good indication of noticeable activity in editing a specific category
-    if (len(diffs) == 3):
+    # I chose ten because this is a good indication of noticeable activity by bots
+    if (len(diffs) == 10):
     	# Calculate rate by summing all differences over the last 3 differences seen
     	rate = sum(diffs)/float(len(diffs))
-    	# Write to standard error every three edits to keep track of rate
+    	# Write to standard error every ten edits to keep track of rate
     	sys.stderr.write("rate is" + str(rate))
-    	if (rate < 120.00):
+    	if (rate < 30.00):
     		s = ""
     		i = 0
     		# Formatting to print out the names of the most recent articles edited.
