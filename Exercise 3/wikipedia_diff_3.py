@@ -25,21 +25,21 @@ while 1:
         last = d["t"]
         continue
     delta = d["t"] - last
-    # We calculate the rate by averaging over 3 edits at a time
+    # We calculate the rate by averaging over 10 edits at a time
     # As long as we haven't seen 10 edits, we stored the time differences and edits themselves
     if (len(diffs) < 10 and d["bot"] == "yes"):
     	diffs.append(delta)
     	edits.append(d)
     	# Write to standard error when an edit is made to monitor all edits going on
     	sys.stderr.write(d["name"])
-    # We measure the rate over an average of 3 total differences. This gives us an average rate for our stream.
+    # We measure the rate over an average of 10 total differences. This gives us an average rate for our stream.
     # I chose ten because this is a good indication of noticeable activity by bots
     if (len(diffs) == 10):
     	# Calculate rate by summing all differences over the last 3 differences seen
     	rate = sum(diffs)/float(len(diffs))
     	# Write to standard error every ten edits to keep track of rate
     	sys.stderr.write("rate is" + str(rate))
-    	if (rate < 30.00):
+    	if (rate < 10.00):
     		s = ""
     		i = 0
     		# Formatting to print out the names of the most recent articles edited.
